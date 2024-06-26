@@ -513,6 +513,27 @@ app.post("/users/cart/:id", (req, res) => {
   }
 });
 
+// end point to update the quantity of a product in cart
+app.patch("/users/cart/:id", (req, res) => {
+  try {
+    const { id } = req.params;
+    const { quantity } = req.body;
+    const cart = ecormmerce.carts.find(cart => cart.id == id);
+    if (!cart) throw new Error("Cart item not found");
+    if (!quantity) throw new Error("New quantity must be specified");
+    cart.quantity = quantity;
+    res.status(200).json({
+      status: true,
+      message: "Cart item updated successfully",
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: false,
+      message: error.message,
+    });
+  }
+});
+
 // end point to delete a product from cart
 app.delete("/users/cart/:id", (req, res) => {
   try {
